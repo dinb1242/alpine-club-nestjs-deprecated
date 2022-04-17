@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 
 async function bootstrap() {
   console.log(`Starting with ${process.env.NODE_ENV}`);

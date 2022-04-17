@@ -1,19 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { CreateExampleDto } from './dto/create-example.dto';
 import { UpdateExampleDto } from './dto/update-example.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Example } from './entities/example.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ExampleService {
-  create(createExampleDto: CreateExampleDto) {
-    return 'This action adds a new example';
+  constructor(
+    @InjectRepository(Example)
+    private readonly exampleRepository: Repository<Example>,
+  ) {}
+
+  async create(createExampleDto: CreateExampleDto) {
+    // FIXME: Transaction 처리
+    return await this.exampleRepository.save(createExampleDto);
   }
 
   findAll() {
     return `This action returns all example`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} example`;
+  async findOne(id: number) {
+    return await this.exampleRepository.findOne({ where: { id: id } });
   }
 
   update(id: number, updateExampleDto: UpdateExampleDto) {

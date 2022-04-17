@@ -1,1 +1,4 @@
-export class CreateExampleDto {}
+export class CreateExampleDto {
+  title: string;
+  content: string;
+}
