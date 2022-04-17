@@ -5,7 +5,7 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  Delete, HttpException, HttpStatus,
 } from '@nestjs/common';
 import { ExampleService } from './example.service';
 import { CreateExampleDto } from './dto/create-example.dto';
@@ -17,6 +17,7 @@ export class ExampleController {
 
   @Post()
   async create(@Body() createExampleDto: CreateExampleDto) {
+    throw new HttpException('HttpException 예외 발생!', HttpStatus.BAD_REQUEST);
     return await this.exampleService.create(createExampleDto);
   }
 

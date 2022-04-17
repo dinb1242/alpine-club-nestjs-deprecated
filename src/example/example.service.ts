@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateExampleDto } from './dto/create-example.dto';
 import { UpdateExampleDto } from './dto/update-example.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +14,7 @@ export class ExampleService {
 
   async create(createExampleDto: CreateExampleDto) {
     // FIXME: Transaction 처리
+    await this.exampleRepository.findOneOrFail({ where: { id: 'a' } });
     return await this.exampleRepository.save(createExampleDto);
   }
 
