@@ -1,21 +1,32 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { CreateExampleDto } from './dto/create-example.dto';
 import { UpdateExampleDto } from './dto/update-example.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Example } from './entities/example.entity';
-import { Repository } from 'typeorm';
+import { Connection, EntityManager, Repository } from 'typeorm';
 
 @Injectable()
 export class ExampleService {
   constructor(
     @InjectRepository(Example)
     private readonly exampleRepository: Repository<Example>,
+    private connection: Connection,
   ) {}
 
   async create(createExampleDto: CreateExampleDto) {
-    // FIXME: Transaction 처리
-    await this.exampleRepository.findOneOrFail({ where: { id: 'a' } });
-    return await this.exampleRepository.save(createExampleDto);
+    await this.connection.transaction(async (manager: EntityManager) => {
+      await manager.getRepository(Example).save(createExampleDto);
+
+      // throw new BadRequestException();
+
+      await manager.getRepository(Example).save(createExampleDto);
+      return await manager.getRepository(Example).save(createExampleDto);
+    });
   }
 
   findAll() {

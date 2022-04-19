@@ -27,7 +27,6 @@ export class ExampleController {
   @ApiResponse({ description: '생성 실패', status: HttpStatus.BAD_REQUEST })
   @Post()
   async create(@Body() createExampleDto: CreateExampleDto) {
-    throw new HttpException('HttpException 예외 발생!', HttpStatus.BAD_REQUEST);
     return await this.exampleService.create(createExampleDto);
   }
 
